@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.DS_Store
+
+data/raw/
+data/interim/
+data/cleaned/
+
+*.zip
+
+outputs/tables/matched_data.csv
+outputs/tables/unmatched_businesses.csv
