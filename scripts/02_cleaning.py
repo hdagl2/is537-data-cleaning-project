@@ -28,18 +28,28 @@ food_clean["period"] = food_clean["Year"].apply(
     lambda x: "pre_2018" if pd.notnull(x) and x < 2018 else "post_2018"
 )
 
-def is_critical(violations):
-    if pd.isna(violations):
+def is_critical_violation(row):
+    if pd.isna(row["Violations"]):
         return 0
-    v = str(violations).lower()
-    keywords = [
-        "critical",
-        "priority",
-        "priority foundation"
-    ]
-    return 1 if any(k in v for k in keywords) else 0
 
-food_clean["critical_flag"] = food_clean["Violations"].apply(is_critical)
+    violations = str(row["Violations"]).lower()
+
+    # Pre-2018: old Chicago inspection system used codes 1–14 as critical violations
+    if pd.notnull(row["Year"]) and row["Year"] < 2018:
+        codes = []
+        for violation in violations.split("|"):
+            first_part = violation.strip().split(".")[0]
+            if first_part.isdigit():
+                codes.append(int(first_part))
+
+        return 1 if any(code <= 14 for code in codes) else 0
+
+    # Post-2018: "Priority" is the updated serious violation category
+    else:
+        return 1 if "priority violation" in violations or "priority foundation" in violations else 0
+
+
+food_clean["critical_flag"] = food_clean.apply(is_critical_violation, axis=1)
 
 food_clean.to_csv("data/cleaned/food_clean.csv", index=False)
 
