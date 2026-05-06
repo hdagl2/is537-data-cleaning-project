@@ -23,7 +23,7 @@ food_clean["Address"] = food_clean["Address"].astype(str).str.upper().str.strip(
 licenses["LEGAL NAME"] = licenses["LEGAL NAME"].astype(str).str.upper().str.strip()
 licenses["DOING BUSINESS AS NAME"] = licenses["DOING BUSINESS AS NAME"].astype(str).str.upper().str.strip()
 licenses["ADDRESS"] = licenses["ADDRESS"].astype(str).str.upper().str.strip()
-
+licenses = licenses.drop_duplicates(subset=["license"])
 # Match on license number first
 matched = food_clean.merge(
     licenses,

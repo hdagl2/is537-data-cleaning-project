@@ -1,5 +1,5 @@
 metric,value
-total_inspection_records,1985116.0
-matched_records,1969146.0
+total_inspection_records,307984.0
+matched_records,292014.0
 unmatched_records,15970.0
-license_match_rate,0.9919551300780408
+license_match_rate,0.9481466569691932
